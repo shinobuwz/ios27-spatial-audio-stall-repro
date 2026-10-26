@@ -1,0 +1,96 @@
+# Info.plist variant C: LSApplicationCategoryType = public.app-category.games
+# plus LSSupportsGameMode = true (the configuration shipped in this repository).
+# Same build/revision as the other variants; AirPods connected, A2DP before switch.
+# Expect: tens of seconds, with per-call multi-second getters and setPreferred.
+
+[+      0.2ms] ===== RUN mode=repro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) tone=player =====
+[+      7.2ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+     12.5ms] STEP prepare.setCategory(Playback) 2.0ms
+[+     24.4ms] STEP prepare.setActive(YES) 9.3ms ok=1
+[+    611.3ms] PHASE tone playing=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+    616.5ms] PHASE pre-switch route=out:BluetoothA2DPOutput(spatial=1,ch=2) category=AVAudioSessionCategoryPlayback mode=AVAudioSessionModeDefault sampleRate=48000 inCh=0 outCh=2
+[+   2685.2ms] PHASE switch-to-record options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) preRoute=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+   7478.4ms] STEP setCategory(PlayAndRecord) 4786.8ms options=13
+[+   7945.7ms] STEP setMode(VoiceChat) 464.4ms
+[+   9773.5ms] STEP inputNumberOfChannels 1825.4ms value=1
+[+  14976.4ms] STEP outputNumberOfChannels 5196.8ms value=2
+[+  14981.4ms] STEP outputPort.isSpatialAudioEnabled 0.6ms port=BluetoothHFP spatial=0
+[+  20100.1ms] STEP setPreferredSampleRate(48000) 5116.4ms
+[+  27780.1ms] STEP setPreferredIOBufferDuration(0.01) 7676.3ms
+[+  29956.6ms] STEP setPreferredInputNumberOfChannels(1) 2171.6ms
+[+  35068.4ms] STEP setPreferredOutputNumberOfChannels(2) 5106.7ms
+[+  35072.9ms] STEP setActive(YES) 0.2ms ok=1
+[+  35075.6ms] SUMMARY mode=repro options=13 total_ms=32345.2 category_ms=4786.8 mode_ms=464.4 input_ch_ms=1825.4 output_ch_ms=5196.8 spatial_getter_ms=0.6 sample_rate_ms=5116.4 io_buffer_ms=7676.3 pref_in_ms=2171.6 pref_out_ms=5106.7 active_ms=0.2 slow=1 route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  35077.7ms] SUMMARY wall_clock_since_config_start=32391.2ms
+[+  72453.4ms] CAPTURE start ok=1 elapsed=37373.6ms error=(null)
+[+  72478.2ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  72480.9ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  72483.1ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  72485.3ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  72487.4ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  72713.7ms] IMPACT mode=repro first_input_buffer=37633.9ms since_config_start=70029.8ms frames=4800
+[+  73828.2ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  73833.0ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74001.2ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74320.5ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74509.1ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74612.9ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74717.0ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  74804.0ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  75183.7ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  75286.0ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  75407.3ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  75517.8ms] NOTIFY media-services-lost
+[+  78665.5ms] CAPTURE buffers=30 first_buffer=1
+[+  78697.7ms] STEP cleanup.setActive(NO) 20.2ms ok=0 error=Session lookup failed(-50)
+[+  78708.1ms] PHASE tone stopped was=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+  78714.4ms] RUN DONE mode=repro
+[+  78720.2ms] NOTIFY media-services-reset
+[+      0.0ms] ready app=com.example.SpatialAudioStallRepro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker)
+[+      0.0ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+      0.0ms] PERMISSION microphone granted=1
+[+      0.0ms] AUTO scheduled mode=repro
+[+      0.1ms] ===== RUN mode=repro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) tone=player =====
+[+      8.7ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+     13.7ms] STEP prepare.setCategory(Playback) 1.4ms
+[+     27.3ms] STEP prepare.setActive(YES) 10.9ms ok=1
+[+    359.1ms] PHASE tone playing=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+    393.6ms] PHASE pre-switch route=out:BluetoothA2DPOutput(spatial=1,ch=2) category=AVAudioSessionCategoryPlayback mode=AVAudioSessionModeDefault sampleRate=48000 inCh=0 outCh=2
+[+   2435.6ms] PHASE switch-to-record options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) preRoute=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+   7203.7ms] STEP setCategory(PlayAndRecord) 4761.5ms options=13
+[+   7625.6ms] STEP setMode(VoiceChat) 418.5ms
+[+  12458.9ms] STEP inputNumberOfChannels 4829.6ms value=1
+[+  17494.8ms] STEP outputNumberOfChannels 5031.5ms value=2
+[+  17498.3ms] STEP outputPort.isSpatialAudioEnabled 0.4ms port=BluetoothHFP spatial=1
+[+  22493.7ms] STEP setPreferredSampleRate(48000) 4993.1ms
+[+  27629.5ms] STEP setPreferredIOBufferDuration(0.01) 5131.6ms
+[+  29874.7ms] STEP setPreferredInputNumberOfChannels(1) 2240.7ms
+[+  34825.7ms] STEP setPreferredOutputNumberOfChannels(2) 4947.6ms
+[+  34830.1ms] STEP setActive(YES) 0.2ms ok=1
+[+  34834.6ms] SUMMARY mode=repro options=13 total_ms=32354.7 category_ms=4761.5 mode_ms=418.5 input_ch_ms=4829.6 output_ch_ms=5031.5 spatial_getter_ms=0.4 sample_rate_ms=4993.1 io_buffer_ms=5131.6 pref_in_ms=2240.7 pref_out_ms=4947.6 active_ms=0.2 slow=1 route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  34838.9ms] SUMMARY wall_clock_since_config_start=32399.6ms
+[+  58166.3ms] CAPTURE start ok=1 elapsed=23322.9ms error=(null)
+[+  58186.1ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  58188.1ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  58190.2ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  58191.5ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  58192.8ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  58415.6ms] IMPACT mode=repro first_input_buffer=23572.2ms since_config_start=55981.2ms frames=4800
+[+  62155.3ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62276.2ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62339.2ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62602.6ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62653.3ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62730.6ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  62856.8ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63075.8ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63142.6ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63415.2ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63475.5ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63544.5ms] NOTIFY route-change reason=4 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  63595.7ms] NOTIFY route-change reason=1 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+  64424.7ms] CAPTURE buffers=42 first_buffer=1
+[+  65224.0ms] STEP cleanup.setActive(NO) 785.1ms ok=1
+[+  65260.8ms] PHASE tone stopped was=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+  65263.6ms] RUN DONE mode=repro
+[+  65268.2ms] NOTIFY route-change reason=3 spatial=nil route=out:BluetoothA2DPOutput(spatial=1,ch=2)

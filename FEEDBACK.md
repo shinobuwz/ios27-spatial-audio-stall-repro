@@ -42,9 +42,9 @@ expected to return in milliseconds:
 `setPreferredInputNumberOfChannels:error:`,
 `setPreferredOutputNumberOfChannels:error:`, `setActive:error:`
 
-The whole configuration path takes **20.8–28.9 s**, after which the microphone
-still needs another 18.3–20.9 s before the first `AVAudioEngine` input buffer
-arrives (40–47 s from the switch until audio actually flows).
+The whole configuration path takes **20.8–32.4 s**, after which the microphone
+still needs another 18.3–37.6 s before the first `AVAudioEngine` input buffer
+arrives (40–70 s from the switch until audio actually flows).
 
 If the playing audio unit is stopped before the same sequence is executed, every
 call returns in well under 2 ms and the total is 87 ms. So the stall requires
@@ -86,6 +86,9 @@ Four cold launches on the same device/headphones (ms):
 | `setActive` | 0.2 | 0.2 | 0.3 | 0.2 |
 | **total** | **23478.3** | **21992.7** | **20839.0** | **28907.3** |
 | first input buffer after capture start | 20872.4 | 19039.1 | 19088.2 | 18281.0 |
+
+Two further cold launches of the same build took 32345.2 ms and 32354.7 ms
+(first input buffer 37633.9 ms and 23572.2 ms).
 
 Control (player stopped and session deactivated before the identical switch):
 1.7 / 0.5 / 0.4 / 0.7 / 0.9 / 0.4 / 0.7 / 0.3 / 81.2 ms, total **87.2 ms**, first input
@@ -129,10 +132,15 @@ i.e. the app is waiting in a synchronous round trip to the audio daemon, and eve
   setMode 5616.7 ms, getters 1097.8 / 2229.5 ms, setPreferred
   4892.5 / 7670.9 / 5122.6 / 4915.6 ms). What matters is that another AudioUnit
   is still rendering at the moment of the switch.
-- If the app does not declare `LSApplicationCategoryType =
-  public.app-category.games` + `LSSupportsGameMode`, Spatial Audio is unavailable
-  for the app in Control Center and the stall shrinks to 1.9–2.0 s (still
-  ~22–24× the control, but far from the 20–29 s case). Declaring
+- Spatial Audio eligibility gates the severity, not the existence, of the bug.
+  With neither `LSApplicationCategoryType = public.app-category.games` nor
+  `LSSupportsGameMode`, Spatial Audio is unavailable for the app in Control
+  Center and the total drops to 1835–2047 ms over 8 runs — still ~21× the
+  87 ms control, and `setCategory`/`setMode` still take ~0.9–1.0 s each.
+  With `LSSupportsGameMode` alone the result is bimodal: 3 of 4 runs take
+  4.65–4.76 s (`setMode` alone ~3.75 s), the fourth looks like the keyless case.
+  Only with both keys do the channel getters and `setPreferred*` calls also
+  block for 1.8–7.7 s, giving the 20–32 s total. Declaring
   `AVGameBypassSystemSpatialAudio = YES` removes the symptom entirely.
 - Impact in a shipped game: a single "start voice chat" action freezes the main
   thread for tens of seconds and audio is unusable for the whole window.

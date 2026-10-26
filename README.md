@@ -18,7 +18,7 @@ for seconds per call:
 Stop the rendering AudioUnit before the same sequence and every call returns in
 well under 2 ms.
 
-Measured on the same build and device: **20.8–28.9 s vs 87 ms** (options 13), and
+Measured on the same build and device: **20.8–32.4 s vs 87 ms** (options 13), and
 **36.2 s** with the option set a shipping game uses (`237`). iOS' own hang
 detector flags a **Severe Hang of 41.02 s** on the main thread.
 
@@ -46,13 +46,15 @@ the app is allowed to use **system Spatial Audio** at all:
 <true/>
 ```
 
-A/B measurement of the identical call sequence:
+A/B measurement of the identical call sequence (same revision, AirPods connected,
+A2DP before the switch). Note that dropping the keys makes the stall an order of
+magnitude smaller but does not remove it — and Game Mode alone is intermittent:
 
 | Info.plist | Total configuration cost |
 |---|---|
-| neither key | 1901–2047 ms |
-| `LSSupportsGameMode` only | 4762.0 ms |
-| both keys | **20839–28907 ms** |
+| neither key | 1835–2047 ms |
+| `LSSupportsGameMode` only | 1.9 s (1 of 4 runs) / 4.65–4.76 s (3 of 4) |
+| both keys | **20839–32355 ms** |
 
 Do **not** add `AVGameBypassSystemSpatialAudio`: setting it to `true` bypasses
 system spatial audio and the stall disappears, which looks like "no bug".

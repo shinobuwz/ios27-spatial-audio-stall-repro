@@ -12,6 +12,9 @@ All logs come from the same build of this repository
 | `repro-options-237.log` | same as above with `opts237` (the option set a shipping game uses) | `total_ms=36226`, first input buffer after 58.60 s |
 | `hangs.xml` | hang table exported from the Instruments trace | `Severe Hang 41.02 s` on the main thread |
 | `main-thread-stacks.txt` | main-thread stacks captured inside the stall | parked in `avas::client::SessionCore` (synchronous XPC) |
+| `plist-a-no-keys.log` | Info.plist with neither key (2 runs) | 1835.3 / 1979.5 ms, getters and `setPreferred*` in single-digit ms |
+| `plist-b-gamemode-only.log` | `LSSupportsGameMode` only (3 runs) | bimodal: 4648.7 / 4656.0 ms vs 1880.1 ms; the slow runs have `setMode` ≈ 3.75 s |
+| `plist-c-both-keys.log` | both keys, i.e. what this repository ships (2 runs) | 32345.2 / 32354.7 ms, first input buffer 37.6 s / 23.6 s after capture start |
 
 ## How the two runs relate
 

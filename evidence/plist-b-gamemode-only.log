@@ -1,0 +1,97 @@
+# Info.plist variant B: LSSupportsGameMode = true, no LSApplicationCategoryType.
+# Same build/revision as the other variants; AirPods connected, A2DP before switch.
+# Expect: bimodal - setMode either ~0.97 s (like variant A) or ~3.7 s. Two of
+# these three runs are the slow mode: 4648.7 and 4656.0 ms vs 1880.1 ms.
+
+[+      0.1ms] ===== RUN mode=repro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) tone=player =====
+[+      7.4ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+     12.2ms] STEP prepare.setCategory(Playback) 1.6ms
+[+     24.1ms] STEP prepare.setActive(YES) 9.3ms ok=1
+[+    327.9ms] PHASE tone playing=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+    334.2ms] PHASE pre-switch route=out:BluetoothA2DPOutput(spatial=1,ch=2) category=AVAudioSessionCategoryPlayback mode=AVAudioSessionModeDefault sampleRate=48000 inCh=0 outCh=2
+[+   2400.8ms] PHASE switch-to-record options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) preRoute=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+   3295.1ms] STEP setCategory(PlayAndRecord) 891.5ms options=13
+[+   7042.0ms] STEP setMode(VoiceChat) 3744.7ms
+[+   7053.9ms] STEP inputNumberOfChannels 6.5ms value=1
+[+   7058.9ms] STEP outputNumberOfChannels 0.7ms value=2
+[+   7062.2ms] STEP outputPort.isSpatialAudioEnabled 0.4ms port=BluetoothHFP spatial=0
+[+   7066.5ms] STEP setPreferredSampleRate(48000) 1.0ms
+[+   7070.7ms] STEP setPreferredIOBufferDuration(0.01) 0.6ms
+[+   7075.7ms] STEP setPreferredInputNumberOfChannels(1) 2.1ms
+[+   7080.1ms] STEP setPreferredOutputNumberOfChannels(2) 1.0ms
+[+   7083.8ms] STEP setActive(YES) 0.2ms ok=1
+[+   7086.9ms] SUMMARY mode=repro options=13 total_ms=4648.7 category_ms=891.5 mode_ms=3744.7 input_ch_ms=6.5 output_ch_ms=0.7 spatial_getter_ms=0.4 sample_rate_ms=1.0 io_buffer_ms=0.6 pref_in_ms=2.1 pref_out_ms=1.0 active_ms=0.2 slow=1 route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7089.7ms] SUMMARY wall_clock_since_config_start=4686.1ms
+[+   7104.3ms] CAPTURE start ok=1 elapsed=12.5ms error=(null)
+[+   7110.0ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7112.1ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7202.9ms] IMPACT mode=repro first_input_buffer=111.1ms since_config_start=4802.7ms frames=4800
+[+  13369.5ms] CAPTURE buffers=62 first_buffer=1
+[+  14205.4ms] STEP cleanup.setActive(NO) 819.9ms ok=1
+[+  14211.5ms] PHASE tone stopped was=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+  14213.0ms] RUN DONE mode=repro
+[+  14232.2ms] NOTIFY route-change reason=3 spatial=nil route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+      0.0ms] ready app=com.example.SpatialAudioStallRepro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker)
+[+      0.0ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+      0.0ms] PERMISSION microphone granted=1
+[+      0.0ms] AUTO scheduled mode=repro
+[+      0.1ms] ===== RUN mode=repro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) tone=player =====
+[+      8.2ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+     13.1ms] STEP prepare.setCategory(Playback) 1.6ms
+[+     24.6ms] STEP prepare.setActive(YES) 8.6ms ok=1
+[+    324.0ms] PHASE tone playing=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+    331.7ms] PHASE pre-switch route=out:BluetoothA2DPOutput(spatial=1,ch=2) category=AVAudioSessionCategoryPlayback mode=AVAudioSessionModeDefault sampleRate=48000 inCh=0 outCh=2
+[+   2381.4ms] PHASE switch-to-record options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) preRoute=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+   3289.9ms] STEP setCategory(PlayAndRecord) 901.8ms options=13
+[+   4258.8ms] STEP setMode(VoiceChat) 966.2ms
+[+   4268.3ms] STEP inputNumberOfChannels 4.6ms value=1
+[+   4273.5ms] STEP outputNumberOfChannels 0.3ms value=2
+[+   4277.1ms] STEP outputPort.isSpatialAudioEnabled 0.6ms port=BluetoothHFP spatial=0
+[+   4282.2ms] STEP setPreferredSampleRate(48000) 1.1ms
+[+   4287.6ms] STEP setPreferredIOBufferDuration(0.01) 1.9ms
+[+   4292.4ms] STEP setPreferredInputNumberOfChannels(1) 2.1ms
+[+   4296.1ms] STEP setPreferredOutputNumberOfChannels(2) 1.3ms
+[+   4299.0ms] STEP setActive(YES) 0.2ms ok=1
+[+   4301.5ms] SUMMARY mode=repro options=13 total_ms=1880.1 category_ms=901.8 mode_ms=966.2 input_ch_ms=4.6 output_ch_ms=0.3 spatial_getter_ms=0.6 sample_rate_ms=1.1 io_buffer_ms=1.9 pref_in_ms=2.1 pref_out_ms=1.3 active_ms=0.2 slow=1 route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   4303.7ms] SUMMARY wall_clock_since_config_start=1921.4ms
+[+   4315.4ms] CAPTURE start ok=1 elapsed=9.3ms error=(null)
+[+   4318.7ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   4320.8ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   4412.2ms] IMPACT mode=repro first_input_buffer=106.1ms since_config_start=2032.5ms frames=4800
+[+  10573.0ms] CAPTURE buffers=62 first_buffer=1
+[+  11396.3ms] STEP cleanup.setActive(NO) 804.1ms ok=1
+[+  11408.6ms] PHASE tone stopped was=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+  11410.3ms] RUN DONE mode=repro
+[+  11426.4ms] NOTIFY route-change reason=3 spatial=nil route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+      0.0ms] ready app=com.example.SpatialAudioStallRepro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker)
+[+      0.0ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+      0.0ms] PERMISSION microphone granted=1
+[+      0.0ms] AUTO scheduled mode=repro
+[+      0.1ms] ===== RUN mode=repro options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) tone=player =====
+[+      7.7ms] ENV device=iPhone model=iPhone system=iOS 27.0.1 lowPower=0 thermal=0
+[+     12.8ms] STEP prepare.setCategory(Playback) 1.8ms
+[+     24.3ms] STEP prepare.setActive(YES) 8.7ms ok=1
+[+    294.1ms] PHASE tone playing=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+    302.5ms] PHASE pre-switch route=out:BluetoothA2DPOutput(spatial=1,ch=2) category=AVAudioSessionCategoryPlayback mode=AVAudioSessionModeDefault sampleRate=48000 inCh=0 outCh=2
+[+   2402.8ms] PHASE switch-to-record options=13(MixWithOthers|AllowBluetoothHFP|DefaultToSpeaker) preRoute=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+   3280.5ms] STEP setCategory(PlayAndRecord) 875.7ms options=13
+[+   7053.8ms] STEP setMode(VoiceChat) 3770.8ms
+[+   7065.8ms] STEP inputNumberOfChannels 6.4ms value=1
+[+   7070.4ms] STEP outputNumberOfChannels 0.3ms value=2
+[+   7074.4ms] STEP outputPort.isSpatialAudioEnabled 0.4ms port=BluetoothHFP spatial=0
+[+   7078.1ms] STEP setPreferredSampleRate(48000) 0.7ms
+[+   7080.3ms] STEP setPreferredIOBufferDuration(0.01) 0.5ms
+[+   7083.0ms] STEP setPreferredInputNumberOfChannels(1) 0.6ms
+[+   7087.0ms] STEP setPreferredOutputNumberOfChannels(2) 0.5ms
+[+   7089.2ms] STEP setActive(YES) 0.1ms ok=1
+[+   7092.2ms] SUMMARY mode=repro options=13 total_ms=4656.0 category_ms=875.7 mode_ms=3770.8 input_ch_ms=6.4 output_ch_ms=0.3 spatial_getter_ms=0.4 sample_rate_ms=0.7 io_buffer_ms=0.5 pref_in_ms=0.6 pref_out_ms=0.5 active_ms=0.1 slow=1 route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7095.8ms] SUMMARY wall_clock_since_config_start=4689.6ms
+[+   7108.7ms] CAPTURE start ok=1 elapsed=9.8ms error=(null)
+[+   7115.2ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7117.1ms] NOTIFY route-change reason=3 spatial=nil route=in:BluetoothHFP(ch=1),out:BluetoothHFP(spatial=1,ch=2)
+[+   7207.6ms] IMPACT mode=repro first_input_buffer=108.7ms since_config_start=4805.2ms frames=4800
+[+  13269.4ms] CAPTURE buffers=61 first_buffer=1
+[+  14086.9ms] STEP cleanup.setActive(NO) 798.9ms ok=1
+[+  14099.4ms] PHASE tone stopped was=player=1 route=out:BluetoothA2DPOutput(spatial=1,ch=2)
+[+  14101.0ms] RUN DONE mode=repro
+[+  14116.0ms] NOTIFY route-change reason=3 spatial=nil route=out:BluetoothA2DPOutput(spatial=1,ch=2)
