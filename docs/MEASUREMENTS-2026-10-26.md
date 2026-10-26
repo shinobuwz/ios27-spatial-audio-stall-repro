@@ -118,6 +118,9 @@ between the app and the audio daemon, not in app-side computation.
 
 ## 6. Capture commands
 
+The raw logs, hang table and stack extract are committed under
+[`../evidence/`](../evidence).
+
 ```bash
 # build + install
 xcodebuild -project SpatialAudioStallRepro.xcodeproj \

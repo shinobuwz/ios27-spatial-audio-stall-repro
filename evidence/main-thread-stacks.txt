@@ -1,0 +1,71 @@
+Main-thread stacks captured inside the stall
+============================================
+
+Source: Instruments "Time Profiler" recording of `auto-repro`
+(`xcrun xctrace record --device '<device name>' --template 'Time Profiler'
+--time-limit 70s --launch -- com.example.SpatialAudioStallRepro auto-repro`),
+then
+
+    xcrun xctrace export --input stall_profiler.trace \
+      --xpath '/trace-toc/run[@number="1"]/data/table[@schema="time-profile"]' \
+      --output time-profile.xml
+
+Frames below are verbatim `name` attributes from that export. Blank entries in
+the raw export are frames without a symbol (typically the mach message wait
+inside the synchronous XPC round trip).
+
+The full .trace file is ~4 MB and is not committed; it is attached to the
+Feedback Assistant report. The exported hang table is in `hangs.xml`.
+
+----------------------------------------------------------------------------
+setCategory (main thread, t = 6.73 s)
+----------------------------------------------------------------------------
+    avas::client::SessionCore::setCategory(NSString*, NSString*, AVAudioSessionRouteSharingPolicy, unsigned long)
+    avas::client::SessionCore::setCategory(NSString*, unsigned long, NSError* __autoreleasing*)
+    -[AVAudioSession setCategory:withOptions:error:]
+
+A neighbouring sample (t = 6.46 s) shows the same call one frame deeper:
+
+    avas::client::SessionCore::SetBatchProperties(NSDictionary<NSString*, id<NSSecureCoding>>*, NSArray<NSDictionary<...>>*)
+    avas::client::SessionCore::setCategory(NSString*, unsigned long, NSError* __autoreleasing*)
+    -[AVAudioSession setCategory:withOptions:error:]
+    ...
+    -[NSXPCEncoder _encodeUnkeyedObject:]
+    -[NSXPCEncoder _replaceObject:]
+    objc_autorelease
+    AutoreleasePoolPage::add(objc_object*)
+
+----------------------------------------------------------------------------
+inputNumberOfChannels (main thread, t = 13.79 s)
+----------------------------------------------------------------------------
+    avas::client::SessionCore::GetProperty_DefaultToZero<unsigned int>(NSString*, bool) const
+    avas::client::KVOProperty<unsigned int>::UpdateIfDirty(std::__1::unique_lock<caulk::mach::unfair_recursive_lock>&, std::__1::function<unsigned int ()> const&)
+    avas::client::KVOProperty<unsigned int>::UpdateIfDirty(std::__1::function<unsigned int ()> const&)
+    -[AVAudioSession inputNumberOfChannels]
+
+----------------------------------------------------------------------------
+outputNumberOfChannels (main thread, t = 14.11 s)
+----------------------------------------------------------------------------
+    -[AVAudioSession outputNumberOfChannels]
+
+----------------------------------------------------------------------------
+setPreferredInputNumberOfChannels (main thread, t = 26.43 s)
+----------------------------------------------------------------------------
+    avas::client::SessionCore::SetProperty(NSString*, id<NSSecureCoding>, bool) const
+    -[AVAudioSession setPreferredInputNumberOfChannels:error:]
+
+----------------------------------------------------------------------------
+Route notification handling during the same window (t = 48.78 s)
+----------------------------------------------------------------------------
+    avas::client::KVOProperty<float>::UpdateAndNotify(std::__1::unique_lock<caulk::mach::unfair_recursive_lock>&, float const&)
+    avas::client::KVOProperty<float>::UpdateAndNotify(float const&, bool)
+    invocation function for block in avas::client::SessionCoreLegacy_iOS::HandleDeferredMessage(NSString*, NSDictionary*)
+
+----------------------------------------------------------------------------
+What this shows
+----------------------------------------------------------------------------
+Every blocked call is parked in AVFoundation's client-side session object
+(`avas::client::SessionCore`), i.e. in the synchronous round trip to the audio
+daemon. Not one of the samples is doing app-side work: the app is waiting.
+Even read-only properties (`inputNumberOfChannels`, `outputNumberOfChannels`)
+go through `GetProperty` on the same path and block for seconds.

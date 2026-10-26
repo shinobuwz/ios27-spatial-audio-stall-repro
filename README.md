@@ -145,7 +145,11 @@ Sources/StallReproViewController.m    all measurement logic
 Resources/Info.plist                  includes the two Spatial Audio keys
 run_repro.sh                          build / install / cold launch / pull log
 docs/MEASUREMENTS-2026-10-26.md       measurements, hang records, main-thread stacks
+evidence/                             raw logs / hang table / stacks from the runs below
 FEEDBACK.md                           problem description ready for Feedback Assistant
 ```
 
-`logs/` and `artifacts/` are local capture output and are not committed.
+`evidence/` contains the raw capture output referenced by the report
+(`control-cold-launch.log`, `repro-cold-launch.log`, `repro-options-237.log`,
+`hangs.xml`, `main-thread-stacks.txt`); see [`evidence/README.md`](evidence/README.md).
+`logs/` and `artifacts/` are local scratch output and are not committed.
