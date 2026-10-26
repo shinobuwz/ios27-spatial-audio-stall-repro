@@ -90,7 +90,9 @@ Four cold launches on the same device/headphones (ms):
 Two further cold launches of the same build took 32345.2 ms and 32354.7 ms
 (first input buffer 37633.9 ms and 23572.2 ms).
 
-Control (player stopped and session deactivated before the identical switch):
+Playback-stopped baseline (the app's control mode: player stopped and session
+deactivated before the identical switch) - a different comparison from the
+Spatial Audio A/B below:
 1.7 / 0.5 / 0.4 / 0.7 / 0.9 / 0.4 / 0.7 / 0.3 / 81.2 ms, total **87.2 ms**, first input
 buffer 662.2 ms.
 
@@ -135,8 +137,10 @@ i.e. the app is waiting in a synchronous round trip to the audio daemon, and eve
 - Spatial Audio eligibility gates the severity, not the existence, of the bug.
   With neither `LSApplicationCategoryType = public.app-category.games` nor
   `LSSupportsGameMode`, Spatial Audio is unavailable for the app in Control
-  Center and the total drops to 1835–2047 ms over 8 runs — still ~21× the
-  87 ms control, and `setCategory`/`setMode` still take ~0.9–1.0 s each.
+  Center and the total drops to 1835–2047 ms over 8 runs. That keyless run is
+  the control group for this variable: it is still ~21× the 87 ms
+  playback-stopped baseline, and `setCategory`/`setMode` still take ~0.9–1.0 s
+  each. Enabling Spatial Audio multiplies the cost by a further **11–18×**.
   With `LSSupportsGameMode` alone the result is bimodal: 3 of 4 runs take
   4.65–4.76 s (`setMode` alone ~3.75 s), the fourth looks like the keyless case.
   Only with both keys do the channel getters and `setPreferred*` calls also

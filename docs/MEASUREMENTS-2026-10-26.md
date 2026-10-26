@@ -16,23 +16,32 @@ excluded).
 allowed to use **system Spatial Audio**. All three variants ran the identical
 "switch to PlayAndRecord + VoiceChat while a tone is playing" sequence:
 
-| Info.plist | runs | Total | setCategory | setMode | channel getters / setPreferred |
-|---|---|---|---|---|---|
-| neither key | 8 | 1835–2047 ms | 873–958 ms | 953–1077 ms | 0.2–84 ms |
-| `LSSupportsGameMode` only | 4 | 1880 ms (1/4) · 4649–4762 ms (3/4) | 876–907 ms | 966 ms · 3745–3771 ms | 0.3–2.1 ms |
-| both keys | 6 | **20839–32355 ms** | 1853–4787 ms | 418–456 ms | 1795–7718 ms |
+| Info.plist | role in this experiment | runs | Total | setCategory | setMode | channel getters / setPreferred |
+|---|---|---|---|---|---|---|
+| neither key | **control (Spatial Audio off)** | 8 | 1835–2047 ms | 873–958 ms | 953–1077 ms | 0.2–84 ms |
+| `LSSupportsGameMode` only | partial (Game Mode, no Spatial Audio) | 4 | 1880 ms (1/4) · 4649–4762 ms (3/4) | 876–907 ms | 966 ms · 3745–3771 ms | 0.3–2.1 ms |
+| both keys | **treatment (Spatial Audio on)** | 6 | **20839–32355 ms** | 1853–4787 ms | 418–456 ms | 1795–7718 ms |
 
 Variants A/B/C were re-measured back-to-back on the same revision (2 / 3 / 2
 runs); the ranges also include earlier runs of the same measurement code. In all
 runs the AirPods were connected and `BluetoothA2DPOutput` was the route before
 the switch.
 
-- Removing both keys makes the stall an order of magnitude smaller but does
-  **not** remove it: ~1.9 s in total, still ~21× the control.
+The keyless run is the **control group for the Spatial Audio variable**: it shows
+what the same call sequence costs when the app is not allowed to use system
+Spatial Audio. Section 3 is a different baseline, for the "is another AudioUnit
+rendering" variable, and must not be compared against the Spatial Audio
+treatment.
+
+- Control (Spatial Audio off) is already abnormal on its own: ~1.9 s in total,
+  ~21× the 87 ms playback-stopped baseline in §3.
+- Turning Spatial Audio on multiplies it by another **11–18×**
+  (1835→32355 ms, 2047→20839 ms).
 - Game Mode alone is intermittent: 3 of 4 runs take ~4.65 s because `setMode`
-  alone jumps to ~3.75 s; the fourth is indistinguishable from "neither key".
-- Only with both keys do the read-only channel getters and `setPreferred*`
-  calls block for seconds as well — that is what produces the 20–32 s total.
+  alone jumps to ~3.75 s; the fourth is indistinguishable from the control.
+- Only in the treatment (both keys) do the read-only channel getters and
+  `setPreferred*` calls block for seconds as well — that is what produces the
+  20–32 s total.
 
 Runs taken while the AirPods were disconnected (route `out:Speaker`, totals
 426–494 ms) are excluded; they are reproducible but not the scenario.
@@ -75,7 +84,7 @@ Per-call values are in the same range as the earlier probe run
 the trigger. In this run `AVAudioEngine startAndReturnError:` itself blocked for
 22240.3 ms, and the first input buffer arrived 58.60 s after the switch began.
 
-## 3. Control (same build: stop playback, deactivate, then switch)
+## 3. Playback-stopped baseline (same build: stop playback, deactivate, then switch)
 
 | step | duration |
 |---|---|
@@ -93,7 +102,9 @@ the trigger. In this run `AVAudioEngine startAndReturnError:` itself blocked for
 
 That is a **239–415×** difference. Identical calls, identical device and
 headphones; the only difference is whether another AudioUnit is still rendering
-when the switch happens.
+when the switch happens. This is the baseline for the "rendering AudioUnit"
+variable only — it is the app's `control` mode, not the control group of the
+Info.plist experiment above.
 
 ## 4. System hang detection (Instruments Time Profiler, same build)
 

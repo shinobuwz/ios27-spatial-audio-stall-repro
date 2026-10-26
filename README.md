@@ -47,14 +47,17 @@ the app is allowed to use **system Spatial Audio** at all:
 ```
 
 A/B measurement of the identical call sequence (same revision, AirPods connected,
-A2DP before the switch). Note that dropping the keys makes the stall an order of
-magnitude smaller but does not remove it — and Game Mode alone is intermittent:
+A2DP before the switch). The keyless run is the control group for the Spatial
+Audio variable; §3 of the measurements doc is a separate baseline for the
+"another AudioUnit is rendering" variable. Note that the control is already
+abnormal (~21× the playback-stopped baseline) and that Game Mode alone is
+intermittent:
 
-| Info.plist | Total configuration cost |
-|---|---|
-| neither key | 1835–2047 ms |
-| `LSSupportsGameMode` only | 1.9 s (1 of 4 runs) / 4.65–4.76 s (3 of 4) |
-| both keys | **20839–32355 ms** |
+| Info.plist | role | Total configuration cost |
+|---|---|---|
+| neither key | **control (Spatial Audio off)** | 1835–2047 ms |
+| `LSSupportsGameMode` only | partial (Game Mode, no Spatial Audio) | 1.9 s (1 of 4 runs) / 4.65–4.76 s (3 of 4) |
+| both keys | **treatment (Spatial Audio on)** | **20839–32355 ms** |
 
 Do **not** add `AVGameBypassSystemSpatialAudio`: setting it to `true` bypasses
 system spatial audio and the stall disappears, which looks like "no bug".
